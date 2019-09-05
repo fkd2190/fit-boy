@@ -29,7 +29,7 @@ public class WebServerCommunicator : MonoBehaviour
 
     public User AuthenticateUser(string username, string password)
     {
-        return new User();
+        return null;
     }
 
     public bool UploadQuest(Quest quest, int userId)
@@ -39,6 +39,11 @@ public class WebServerCommunicator : MonoBehaviour
 
     public ArrayList GetUserQuests(int userId)
     {
-        return new ArrayList();
+        return null;
+    }
+
+    public bool UpdateUser(User user)
+    {
+        return false;
     }
 }
