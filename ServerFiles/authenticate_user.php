@@ -3,12 +3,11 @@ $response['error'] = true;
 $response['message'] = "Unknown Error";
 $response['user'] = null;
 include "db_connection.php";
-include "functions.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Get data from post variables
-    $username = clean_field($_POST['username']);
-    $password = clean_field($_POST['password']);
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
     //Get Record from database
     $query = "SELECT * FROM users WHERE username='{$username}'";
@@ -25,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $response['user'] = $user;
             unset($response['user']['password']);
         }else{
-            $response['error'] = false;
+            $response['error'] = true;
             $response['message'] = "Username or password incorrect.";
         }
     }

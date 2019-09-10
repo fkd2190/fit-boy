@@ -2,14 +2,13 @@
 $response['error'] = true;
 $response['message'] = "Unknown Error";
 include "db_connection.php";
-include "functions.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $response['error'] = false;
     $response['message'] = "";
     //Set local variables from POST data
-    $username = clean_field($_POST['username']);
-    $email = clean_field($_POST['email']);
+    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
     //Check if username exists in database
@@ -18,15 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     if($results->num_rows > 0){
         $response['error'] = true;
         $response['message'] = "Username already exists.";
-        die(json_encode($response));
     }
     //Check if email exists in database
     $query = "SELECT * FROM users WHERE email = '{$email}'";
     $results = $conn->query($query);
     if($results->num_rows > 0){
         $response['error'] = true;
-        $response['message'] = "Email already exists.";
-        die(json_encode($response));
+        $response['message'] .= "\nEmail already exists.";
     }
 
 
@@ -52,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $response['message'] .= "Password can't be empty.\n";
     }
 
-    
+
     //Add user to database
     if(!$response['error']){
         //Hash Password
@@ -69,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             $response['message'] = "User added to database.";
         }
     }
-    
+
 }else{
     $response['error'] = true;
     $response['message'] = "Invalid request method used. Please use POST";
