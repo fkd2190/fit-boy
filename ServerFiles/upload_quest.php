@@ -9,6 +9,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $username = $_POST['username'];
     $user_id = $_POST['user_id'];
     $quest_name = $_POST['quest_name'];
+	$quest_xp = $_POST['quest_xp'];
     $distance = $_POST['distance'];
     $start_time = $_POST['start_time'];
     $end_time = $_POST['end_time'];
@@ -18,12 +19,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $end_long = $_POST['end_long'];
 
     //Check if user exists
-    $query = "SELECT FROM users WHERE username = '{$username}'";
+    $query = "SELECT * FROM users WHERE username = '{$username}'";
     $result = $conn->query($query);
     if($result->num_rows > 0){
         //Add quest to database
-        $query = "INSERT INTO quests (quest_name, quest_distance, start_time, end_time, start_lat, start_long, end_lat, end_long)" .
-            "VALUES ('{$quest_name}', {$distance}, '{$start_time},', '{$end_time}', {$start_lat}, {$start_long}, {$end_lat}, {$end_long})";
+        $query = "INSERT INTO quests (quest_name, quest_xp, quest_distance, start_time, end_time, start_lat, start_long, end_lat, end_long)" .
+            "VALUES ('{$quest_name}', {$quest_xp}, {$distance}, '{$start_time},', '{$end_time}', {$start_lat}, {$start_long}, {$end_lat}, {$end_long})";
 
         $conn->query($query);
         //Link quest to user
