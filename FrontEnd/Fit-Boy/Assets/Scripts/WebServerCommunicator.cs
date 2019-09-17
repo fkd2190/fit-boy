@@ -6,9 +6,10 @@ using System.Text;
 using System;
 using System.Windows;
 
-public class WebServerCommunicator : MonoBehaviour
+public class WebServerCommunicator
 {
     private const string WEB_SERVER_ADDRESS = "https://fitboy.tk/";
+    private string ErrorMessage;
 
     public bool RegisterUser(string username, string email, string password)
     {
@@ -22,6 +23,7 @@ public class WebServerCommunicator : MonoBehaviour
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             JSONResponse response = new JSONResponse(responsebody);
             Debug.Log(response.ToString());
+            ErrorMessage = response.message;
             return !response.error;
         }
         return false;
@@ -39,6 +41,7 @@ public class WebServerCommunicator : MonoBehaviour
             JSONResponse response = new JSONResponse(responsebody);
             Debug.Log(response.ToString());
             Debug.Log(responsebody);
+            ErrorMessage = response.message;
             return response.user;
         }
         return null;
@@ -67,6 +70,7 @@ public class WebServerCommunicator : MonoBehaviour
             JSONResponse response = new JSONResponse(responsebody);
             Debug.Log(response.ToString());
             Debug.Log(responsebody);
+            ErrorMessage = response.message;
             return !response.error;
         }
         return false;
@@ -86,6 +90,7 @@ public class WebServerCommunicator : MonoBehaviour
             Debug.Log(responsebody);
             JSONResponse response = new JSONResponse(responsebody);
             Debug.Log(response.ToString());
+            ErrorMessage = response.message;
             return !response.error;
         }
         return false;
@@ -101,9 +106,15 @@ public class WebServerCommunicator : MonoBehaviour
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             Debug.Log(responsebody);
             JSONResponse response = new JSONResponse(responsebody);
+            ErrorMessage = response.message;
             return !response.error;
         }
         return false;
+    }
+
+    public string GetLastErrorMessage()
+    {
+        return ErrorMessage;
     }
 
 
