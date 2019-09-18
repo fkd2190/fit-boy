@@ -29,8 +29,6 @@ public class FitBoyGUI : MonoBehaviour
 
         if (user != null)
         {
-            GameObject UserMenuPanel = GameObject.Find("UserMenu");
-            UserMenuPanel.transform.Find("Username").GetComponent<Text>().text = user.GetUsername();
             GameObject.Find("LoginPanel").SetActive(false);
             ErrorText.color = ErrorTextColor;
         }
