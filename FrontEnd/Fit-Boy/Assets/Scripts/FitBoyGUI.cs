@@ -20,7 +20,7 @@ public class FitBoyGUI : MonoBehaviour
 
         if (controller.GetUser() != null)
         {
-            SceneManager.LoadScene("MainScene");
+            GameObject.Find("LoginCanvas").SetActive(false);
             ErrorText.color = ErrorTextColor;
         }
         else
