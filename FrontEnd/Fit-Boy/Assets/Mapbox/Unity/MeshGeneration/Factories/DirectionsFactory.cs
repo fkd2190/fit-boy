@@ -25,6 +25,8 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 		Transform[] _waypoints;
 		private List<Vector3> _cachedWaypoints;
 
+        public Vector2d endLocation;
+
 		[SerializeField]
 		[Range(1,10)]
 		private float UpdateFrequency = 2;
@@ -75,11 +77,11 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 		{
 			var count = _waypoints.Length;
 			var wp = new Vector2d[count];
-			for (int i = 0; i < count; i++)
-			{
-				wp[i] = _waypoints[i].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
-			}
-			var _directionResource = new DirectionResource(wp, RoutingProfile.Driving);
+
+                wp[0] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
+
+            wp[1] = endLocation;
+			var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);
 			_directionResource.Steps = true;
 			_directions.Query(_directionResource, HandleDirectionsResponse);
 		}

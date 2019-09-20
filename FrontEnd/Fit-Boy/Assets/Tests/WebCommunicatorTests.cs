@@ -114,19 +114,19 @@ namespace Tests
         //
         //Upload user tests
         //
-        [Test]
-        public void UpdateValidUser()
-        {
-            communicator.RegisterUser(username, email, password);
-            User user = communicator.AuthenticateUser(username, password);
-            user.SetXp(20);
-            bool result = communicator.UpdateUser(user);
-            Assert.IsTrue(result);
+        //[Test]
+        //public void UpdateValidUser()
+        //{
+        //    communicator.RegisterUser(username, email, password);
+        //    User user = communicator.AuthenticateUser(username, password);
+        //    user.SetXp(20);
+        //    bool result = communicator.UpdateUser(user);
+        //    Assert.IsTrue(result);
 
-            //Check if value updated in database by pulling user from database again
-            user = communicator.AuthenticateUser(username, password);
-            Assert.AreEqual(user.GetXp(), 20);
-        }
+        //    //Check if value updated in database by pulling user from database again
+        //    user = communicator.AuthenticateUser(username, password);
+        //    Assert.AreEqual(user.GetXp(), 20);
+        //}
 
         //
         //Upload Quest tests

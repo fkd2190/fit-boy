@@ -22,4 +22,15 @@ public class Quest
     {
 
     }
+
+    public Quest(string title, int xp, float distance, string startTime, string endTime, GPSCoordinate startCoordinate, GPSCoordinate endCoordinate)
+    {
+        this.title = title;
+        this.distance = distance;
+        this.xpLevels = xp;
+        this.startTime = Convert.ToDateTime(startTime);
+        this.endTime = Convert.ToDateTime(endTime);
+        this.startCoordinate = startCoordinate;
+        this.endCoordinate = endCoordinate;
+    }
 }

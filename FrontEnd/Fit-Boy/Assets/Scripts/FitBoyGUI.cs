@@ -9,6 +9,7 @@ public class FitBoyGUI : MonoBehaviour
 {
     public Controller controller;
     public GameObject LoadingPanel;
+    public GameObject questButtonPrefab;
 
     public void LoginButton()
     {
@@ -29,6 +30,7 @@ public class FitBoyGUI : MonoBehaviour
 
         if (user != null)
         {
+            UpdateProfileGUI(user);
             GameObject.Find("LoginPanel").SetActive(false);
             ErrorText.color = ErrorTextColor;
         }
@@ -75,5 +77,70 @@ public class FitBoyGUI : MonoBehaviour
             }
         }
         LoadingPanel.SetActive(false);
+    }
+
+    public void UpdateProfileGUI(User user)
+    {
+        GameObject.Find("ProfileUsername").GetComponent<Text>().text = user.GetUsername();
+        GameObject.Find("XPSlider").GetComponent<Slider>().value = user.GetXp();
+        GameObject.Find("ProfileXp").GetComponent<Text>().text = user.GetXp() + "/100";
+        GameObject.Find("ProfileLevelValue").GetComponent<Text>().text = "" + user.GetLevel();
+
+        LinkedList<Quest> userQuests = controller.GetUser().GetQuests();
+        userQuests.AddLast(new Quest("Title", 1, 2.3f, "2019-09-09", "2019-9-09", new GPSCoordinate(12.345678, 12.345678), new GPSCoordinate(12.345678, 12.345678)));
+        foreach(Quest quest in userQuests)
+        {
+            GameObject newQuest = Instantiate(questButtonPrefab);
+            newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.title;
+            newQuest.transform.Find("Distance").GetComponent<Text>().text = quest.distance + " km";
+            //Add details
+            Transform detailPanel = newQuest.transform.Find("DetailPanel");
+            detailPanel.transform.Find("StartTime").GetComponent<Text>().text = quest.startTime.ToString("yyyy-MM-dd HH:mm:ss");
+            detailPanel.transform.Find("EndTime").GetComponent<Text>().text = quest.endTime.ToString("yyyy-MM-dd HH:mm:ss");
+            detailPanel.transform.Find("StartCoordinate").GetComponent<Text>().text = quest.startCoordinate.Latitude + ", " + quest.startCoordinate.Longitude;
+            detailPanel.transform.Find("EndCoordinate").GetComponent<Text>().text = quest.endCoordinate.Latitude + ", " + quest.endCoordinate.Longitude;
+            detailPanel.transform.Find("XP").GetComponent<Text>().text = "" + quest.xpLevels;
+
+            newQuest.transform.SetParent(GameObject.Find("Content").transform, false);
+        }
+    }
+
+    public void UpdateQuestGUI()
+    {
+
+    }
+
+    public void DrawQuestOnMap()
+    {
+
+    }
+
+    public void ToggleMenu(GameObject menu)
+    {
+        RectTransform menuRect = menu.GetComponent<RectTransform>();
+        float xPos = menuRect.localPosition.x;
+        //Close all menus
+        foreach (Transform child in GameObject.Find("MenuPanels").transform)
+        {
+            child.GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
+        }
+
+        //Toggle menu
+        if(xPos == 0)
+        {
+            menuRect.localPosition = new Vector3(-800, 100, 0);
+        }
+        else
+        {
+            menuRect.localPosition = new Vector3(0, 100, 0);
+        }
+    }
+
+    public void LogOut(GameObject LoginPanel)
+    {
+        GameObject.Find("SettingsPanel").GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
+        LoginPanel.SetActive(true);
+        controller.GetWebServerCommunicator().UpdateUser(controller.GetUser());
+        controller.SetUser(null);
     }
 }

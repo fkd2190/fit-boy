@@ -22,6 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $response['error'] = false;
             $response['message'] = "User authenticated successfully.";
             $response['user'] = $user;
+            //Get quests
+            $query = "select quest_name, quest_xp, quest_distance, start_time, end_time, start_lat, start_long, end_lat, end_long from quests q, user_quests uq, users u where u.user_id = {$response['user']['user_id']} && u.user_id = uq.user_id && q.quest_id = uq.quest_id";
+            $result = $conn->query($query);
+            if($result->num_rows > 0){
+                for($i = 0; $i < $result->num_rows; $i++){
+                    $response['user']['quests'][$i] = $result->fetch_assoc();
+                }
+            }
             unset($response['user']['password']);
         }else{
             $response['error'] = true;

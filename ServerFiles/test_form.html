@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Form</title>
+</head>
+<body>
+<h3>Register</h3>
+<form action="register.php" method="POST">
+    Username:<input type="text" name="username"><br>
+    Email:<input type="text" name="email"><br>
+    Password:<input type="password" name="password"><br>
+    <input type="submit">
+</form>
+
+<h3>Authenticate</h3>
+<form action="authenticate_user.php" method="POST">
+    Username:<input type="text" name="username"><br>
+    Password:<input type="password" name="password"><br>
+    <input type="submit">
+</form>
+
+<h3>Update</h3>
+<form action="upload_user.php" method="POST">
+    Username:<input type="text" name="username"><br>
+	New Email:<input type="text" name="new_email"><br>
+	New Xp:<input type="text" name="xp"><br>
+	New Level:<input type="text" name="level"><br>
+    <input type="submit">
+</form>
+
+<h3>Delete User</h3>
+<form action="delete_user.php" method="POST">
+    Username:<input type="text" name="username"><br>
+    <input type="submit" name="submit">
+</form>
+
+<h3>Add Quest</h3>
+<form action="upload_quest.php" method="POST">
+    Username:<input type="text" name="username"><br>
+	User Id:<input type="text" name="user_id"><br>
+	Quest title:<input type="text" name="quest_name"><br>
+	Quest xp:<input type="text" name="quest_xp"><br>
+	Distance:<input type="text" name="distance"><br>
+	start lat: (99.999999)<input type="text" name="start_lat"><br>
+	start long: (99.999999)<input type="text" name="start_long"><br>
+	end lat: (99.999999)<input type="text" name="end_lat"><br>
+	end long: (99.999999)<input type="text" name="end_long"><br>
+	start time:(YYYY-MM-DD hh:mm:ss)<input type="text" name="start_time"><br>
+	end time: (YYYY-MM-DD hh:mm:ss)<input type="text" name="end_time"><br>
+    <input type="submit">
+</form>
+</body>
+</html>

@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         //Insert user to database
         $query = "INSERT INTO users (username, email, password, xp, level)
-            VALUES('{$username}', '{$email}', '{$hashed_password}', 0, 0)";
+            VALUES('{$username}', '{$email}', '{$hashed_password}', 0, 1)";
         $conn->query($query);
         if($conn->error){
             $response['error'] = true;

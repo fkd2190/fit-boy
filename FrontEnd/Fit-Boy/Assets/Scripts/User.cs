@@ -9,6 +9,7 @@ public class User
     private string email;
     private int xp;
     private int level;
+    private LinkedList<Quest> userQuests;
 
     public User()
     {
@@ -16,6 +17,7 @@ public class User
         email = "3135035_fitboy@fitboy.tk";
         xp = 10;
         level = 10;
+        userQuests = new LinkedList<Quest>();
     }
 
     public User(int user_id, string username, string email, int xp, int level)
@@ -25,6 +27,7 @@ public class User
         this.email = email;
         this.xp = xp;
         this.level = level;
+        userQuests = new LinkedList<Quest>();
     }
 
     public string GetUsername()
@@ -42,9 +45,17 @@ public class User
         return xp;
     }
 
-    public void SetXp(int xp)
+    public void AddXp(int xp)
     {
-        this.xp = xp;
+        if ((this.xp + xp) > 100)
+        {
+            level++;
+            this.xp = (this.xp + xp) - 100;
+        }
+        else
+        {
+            this.xp += xp;
+        }
     }
 
     public int GetLevel()
@@ -55,5 +66,10 @@ public class User
     public int GetUserID()
     {
         return userID;
+    }
+
+    public LinkedList<Quest> GetQuests()
+    {
+        return userQuests;
     }
 }

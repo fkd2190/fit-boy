@@ -131,15 +131,24 @@ public class WebServerCommunicator
             this.error = bool.Parse(items[1]);
             this.message = items[3];
 
-            //for (int i = 0; i < items.Length; i++)
-            //{
-            //    Debug.Log(i + " " + items[i]);
-            //}
-            if(items.Length > 4)
+            for (int i = 0; i < items.Length; i++)
+            {
+                Debug.Log(i + " " + items[i]);
+            }
+            if (items.Length > 4)
             {
                 if (!items[5].Equals("null"))
                 {
                     user = new User(Int32.Parse(items[6]), items[8], items[10], Int32.Parse(items[12]), Int32.Parse(items[14]));
+                }
+            }
+
+            if(items.Length > 15)
+            {
+                LinkedList<Quest> quests = user.GetQuests();
+                for(int i = 18; i < items.Length; i += 22)
+                {
+                    quests.AddLast(new Quest(items[i], Int32.Parse(items[i + 2]), Single.Parse(items[i + 4]), items[i + 6] + ":" + items[i + 7] + ":" + items[i + 8], items[i + 10] + ":" + items[i + 11] + ":" + items[i + 12], new GPSCoordinate(Double.Parse(items[i + 14]), Double.Parse(items[i + 16])), new GPSCoordinate(Double.Parse(items[i + 18]), Double.Parse(items[i + 20]))));
                 }
             }
 
