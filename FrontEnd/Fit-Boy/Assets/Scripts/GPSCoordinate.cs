@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GPSCoordinate
+﻿public class GPSCoordinate
 {
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
-
-    public GPSCoordinate(double latitude, double longitude)
-    {
-        this.Latitude = latitude;
-        this.Longitude = longitude;
+    
+    public double Lat;
+    
+    public double Lon;
+    
+    string Name = null;
+    
+    public GPSCoordinate(double lat, double lon, string name)
+{
+        this.Lat = lat;
+        this.Lon = lon;
+        this.Name = name;
     }
 }

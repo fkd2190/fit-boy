@@ -54,17 +54,13 @@ public class WebServerCommunicator
             var data = new System.Collections.Specialized.NameValueCollection();
             data.Add("username", user.GetUsername());
             data.Add("user_id", "" + user.GetUserID());
-            data.Add("quest_name", quest.title);
-            data.Add("quest_xp", "" + quest.xpLevels);
-            data.Add("distance", "" + quest.distance);
-            string startTime = quest.startTime.ToString("yyyy-MM-dd HH:mm:ss");
-            string endTime = quest.endTime.ToString("yyyy-MM-dd HH:mm:ss"); ;
-            data.Add("start_time", startTime);
-            data.Add("end_time", endTime);
-            data.Add("start_lat", "" + quest.startCoordinate.Latitude);
-            data.Add("start_long", "" + quest.startCoordinate.Longitude);
-            data.Add("end_lat", "" + quest.endCoordinate.Latitude);
-            data.Add("end_long", "" + quest.endCoordinate.Longitude);
+            data.Add("quest_name", quest.info.Title);
+            data.Add("quest_xp", "" + quest.Xp_reward);
+            data.Add("quest_level", "" + quest.Level);
+            data.Add("start_lat", "" + quest.Start_co.Lat);
+            data.Add("start_long", "" + quest.Start_co.Lon);
+            data.Add("end_lat", "" + quest.Stop_co.Lat);
+            data.Add("end_long", "" + quest.Stop_co.Lon);
             byte[] responsebytes = client.UploadValues(WEB_SERVER_ADDRESS + "upload_quest.php", "POST", data);
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             JSONResponse response = new JSONResponse(responsebody);
@@ -148,7 +144,8 @@ public class WebServerCommunicator
                 LinkedList<Quest> quests = user.GetQuests();
                 for(int i = 18; i < items.Length; i += 22)
                 {
-                    quests.AddLast(new Quest(items[i], Int32.Parse(items[i + 2]), Single.Parse(items[i + 4]), items[i + 6] + ":" + items[i + 7] + ":" + items[i + 8], items[i + 10] + ":" + items[i + 11] + ":" + items[i + 12], new GPSCoordinate(Double.Parse(items[i + 14]), Double.Parse(items[i + 16])), new GPSCoordinate(Double.Parse(items[i + 18]), Double.Parse(items[i + 20]))));
+                    Quest_info qi = new Quest_info(items[i], "");
+                    quests.AddLast(new Quest(qi, Int32.Parse(items[i + 2]), Int32.Parse(items[i + 4]), new GPSCoordinate(Double.Parse(items[i + 14]), Double.Parse(items[i + 16]), ""), new GPSCoordinate(Double.Parse(items[i + 18]), Double.Parse(items[i + 20]), "")));
                 }
             }
 

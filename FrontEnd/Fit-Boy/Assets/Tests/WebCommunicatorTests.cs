@@ -132,25 +132,25 @@ namespace Tests
         //Upload Quest tests
         //
 
-        [Test]
-        public void UploadValidQuest()
-        {
-            Quest quest = new Quest();
-            quest.title = "example";
-            quest.distance = 10;
-            quest.startTime = DateTime.Now;
-            quest.endTime = DateTime.Now;
-            quest.startCoordinate = new GPSCoordinate(12.345678, 12.345678);
-            quest.endCoordinate = new GPSCoordinate(12.345678, 12.345678);
-            quest.xpLevels = 10;
+        //[Test]
+        //public void UploadValidQuest()
+        //{
+        //    Quest quest = new Quest();
+        //    quest.title = "example";
+        //    quest.distance = 10;
+        //    quest.startTime = DateTime.Now;
+        //    quest.endTime = DateTime.Now;
+        //    quest.startCoordinate = new GPSCoordinate(12.345678, 12.345678);
+        //    quest.endCoordinate = new GPSCoordinate(12.345678, 12.345678);
+        //    quest.xpLevels = 10;
 
-            communicator.RegisterUser(username, email, password);
-            User user = communicator.AuthenticateUser(username, password);
+        //    communicator.RegisterUser(username, email, password);
+        //    User user = communicator.AuthenticateUser(username, password);
 
-            bool result = communicator.UploadQuest(quest, user);
+        //    bool result = communicator.UploadQuest(quest, user);
 
-            Assert.IsTrue(result);
-        }
+        //    Assert.IsTrue(result);
+        //}
 
     }
 }

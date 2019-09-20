@@ -1,36 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Drawing;
-using System;
-using System.Windows;
-
 public class Quest
 {
-    public string title { get; set; }
-    public string description { get; set; }
-    public float distance { get; set; }
-    public int xpLevels { get; set; }
-    public int levelRequirements { get; set; }
-    public int questID { get; set; }
-    public GPSCoordinate startCoordinate { get; set; }
-    public GPSCoordinate endCoordinate { get; set; }
-    public DateTime startTime { get; set; }
-    public DateTime endTime { get; set; }
 
-    public Quest()
-    {
+	public Quest_info info { get; set; }
+	public int Xp_reward { get; set; }
+    public GPSCoordinate Stop_co { get; set; }
+    public GPSCoordinate Start_co { get; set; }
+    public int Level;
 
-    }
-
-    public Quest(string title, int xp, float distance, string startTime, string endTime, GPSCoordinate startCoordinate, GPSCoordinate endCoordinate)
-    {
-        this.title = title;
-        this.distance = distance;
-        this.xpLevels = xp;
-        this.startTime = Convert.ToDateTime(startTime);
-        this.endTime = Convert.ToDateTime(endTime);
-        this.startCoordinate = startCoordinate;
-        this.endCoordinate = endCoordinate;
-    }
+	public Quest(Quest_info info, int xp_reward, int level, GPSCoordinate Start_co, GPSCoordinate stop_co)
+	{
+		this.info = info;
+		this.Xp_reward = xp_reward;
+		this.Level = level;
+        this.Start_co = Start_co;
+		this.Stop_co = stop_co;
+	}
 }

@@ -6,6 +6,8 @@ public class Controller : MonoBehaviour
 {
     public User user;
     public WebServerCommunicator wsc;
+    public Quest activeQuest;
+
 
     public Controller()
     {
@@ -20,6 +22,16 @@ public class Controller : MonoBehaviour
     public void SetUser(User user)
     {
         this.user = user;
+    }
+
+    public void SetActiveQuest(Quest quest)
+    {
+        this.activeQuest = quest;
+    }
+
+    public Quest GetActiveQuest()
+    {
+        return activeQuest;
     }
 
     public WebServerCommunicator GetWebServerCommunicator()
