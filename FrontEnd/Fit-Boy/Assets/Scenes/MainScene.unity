@@ -1211,7 +1211,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000042586387, y: 0.0000111497575}
+  m_AnchoredPosition: {x: 0.000042586387, y: 0.000031727224}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &250152888
@@ -6644,7 +6644,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1803951617}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7447,6 +7447,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1063563592433722127, guid: 5b22549366b149f44ad09060b5c743a6,
+        type: 3}
+      propertyPath: m_Name
+      value: Directions
+      objectReference: {fileID: 0}
     - target: {fileID: 1063563592433722126, guid: 5b22549366b149f44ad09060b5c743a6,
         type: 3}
       propertyPath: _map
@@ -7457,11 +7462,6 @@ PrefabInstance:
       propertyPath: _waypoints.Array.data[0]
       value: 
       objectReference: {fileID: 843921208}
-    - target: {fileID: 1063563592433722127, guid: 5b22549366b149f44ad09060b5c743a6,
-        type: 3}
-      propertyPath: m_Name
-      value: Directions
-      objectReference: {fileID: 0}
     - target: {fileID: 1063563592433722121, guid: 5b22549366b149f44ad09060b5c743a6,
         type: 3}
       propertyPath: m_LocalPosition.x
