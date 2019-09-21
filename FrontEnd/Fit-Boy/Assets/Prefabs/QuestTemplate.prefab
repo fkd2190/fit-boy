@@ -279,13 +279,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1063563592433722126, guid: 5b22549366b149f44ad09060b5c743a6,
-          type: 3}
-        m_MethodName: SetEndLocation
-        m_Mode: 2
+      - m_Target: {fileID: 6992239619649235584}
+        m_MethodName: DrawQuest
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 3247938227180872402}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

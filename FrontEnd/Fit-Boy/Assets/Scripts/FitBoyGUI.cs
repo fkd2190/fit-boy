@@ -106,16 +106,17 @@ public class FitBoyGUI : MonoBehaviour
 
     public void FillQuestGUI()
     {
+
         for(int i = 0; i<3; i++)
         {
             Make_quests mq = new Make_quests();
             Quest quest = mq.Gen_Quest();
+            quest.Stop_co = new GPSCoordinate(60.191392, 24.966349, "");
             GameObject newQuest = Instantiate(questButtonPrefab);
+            newQuest.GetComponent<QuestObject>().quest = quest;
             newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.info.Title;
             newQuest.transform.Find("Description").GetComponent<Text>().text = quest.info.Desc;
             newQuest.transform.Find("QuestDetails").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + "Level: " + quest.Level;
-            newQuest.GetComponent<QuestObject>().lat = 60.192438;
-            newQuest.GetComponent<QuestObject>().lon = 24.965575;
 
             newQuest.transform.SetParent(GameObject.Find("NewQuests").transform, false);
         }

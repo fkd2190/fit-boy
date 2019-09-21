@@ -25,7 +25,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 		Transform[] _waypoints;
 		private List<Vector3> _cachedWaypoints;
 
-        public GameObject activeQuest;
+        public Vector2d endPos;
 
 		[SerializeField]
 		[Range(1,10)]
@@ -79,15 +79,13 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 			var wp = new Vector2d[count];
 
                 wp[0] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
-            if(activeQuest == null)
+            if(endPos == null || (endPos.x == 0 && endPos.y == 0))
             {
                 wp[1] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
             }
             else
             {
-                double lat = activeQuest.GetComponent<QuestObject>().lat;
-                double lon = activeQuest.GetComponent<QuestObject>().lon;
-                wp[1] = new Vector2d(lat, lon);
+                wp[1] = endPos;
             }
 			var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);
 			_directionResource.Steps = true;
@@ -170,12 +168,6 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 			_directionsGO.AddComponent<MeshRenderer>().material = _material;
 			return _directionsGO;
 		}
-
-        public void SetEndLocation(GameObject quest)
-        {
-            this.activeQuest = quest;
-            _waypoints[0] = GameObject.Find("PlayerTarget").transform;
-        }
 	}
 
 }
