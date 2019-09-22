@@ -8,8 +8,9 @@ public class QuestObject : MonoBehaviour
 {
     public Quest quest;
 
-    public void DrawQuest()
+    public void DrawQuest(GameObject questButton)
     {
-        GameObject.Find("Directions").GetComponent<DirectionsFactory>().endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
+        GameObject.Find("InitClasses").GetComponent<FitBoyGUI>().StartQuest(quest);
+        Destroy(questButton);
     }
 }

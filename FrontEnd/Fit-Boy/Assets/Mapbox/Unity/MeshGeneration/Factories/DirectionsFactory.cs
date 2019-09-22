@@ -26,12 +26,11 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 		private List<Vector3> _cachedWaypoints;
 
         public Vector2d endPos;
+        public Controller controller;
 
-		[SerializeField]
+        [SerializeField]
 		[Range(1,10)]
 		private float UpdateFrequency = 2;
-
-		
 
 		private Directions _directions;
 		private int _counter;
@@ -79,12 +78,20 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 			var wp = new Vector2d[count];
 
                 wp[0] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
-            if(endPos == null || (endPos.x == 0 && endPos.y == 0))
+            
+            if(controller.GetActiveQuest() == null)
             {
+                Debug.Log("Is null");
                 wp[1] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
             }
             else
             {
+                Quest quest = controller.GetActiveQuest();
+                Debug.Log("Quest Started");
+                if(quest.Start_co == null)
+                {
+                    quest.Start_co = new GPSCoordinate(wp[0].x, wp[0].y, "");
+                }
                 wp[1] = endPos;
             }
 			var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);

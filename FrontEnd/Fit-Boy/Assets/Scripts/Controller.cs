@@ -39,5 +39,14 @@ public class Controller : MonoBehaviour
         return wsc;
     }
 
-
+    public void CompleteQuest()
+    {
+        Debug.Log(user.GetUserID());
+        wsc.UploadQuest(activeQuest, user);
+        user.AddXp(activeQuest.Xp_reward);
+        user.GetQuests().AddLast(activeQuest);
+        wsc.UpdateUser(user);
+        activeQuest = null;
+        GameObject.Find("InitClasses").GetComponent<FitBoyGUI>().UpdateProfileGUI(user);
+    }
 }

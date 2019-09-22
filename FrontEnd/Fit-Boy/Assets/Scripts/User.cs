@@ -22,7 +22,7 @@ public class User
 
     public User(int user_id, string username, string email, int xp, int level)
     {
-        this.userID = userID;
+        this.userID = user_id;
         this.username = username;
         this.email = email;
         this.xp = xp;

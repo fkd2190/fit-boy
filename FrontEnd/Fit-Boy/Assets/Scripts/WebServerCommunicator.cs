@@ -55,6 +55,7 @@ public class WebServerCommunicator
             data.Add("username", user.GetUsername());
             data.Add("user_id", "" + user.GetUserID());
             data.Add("quest_name", quest.info.Title);
+            data.Add("quest_description", quest.info.Desc);
             data.Add("quest_xp", "" + quest.Xp_reward);
             data.Add("quest_level", "" + quest.Level);
             data.Add("start_lat", "" + quest.Start_co.Lat);
@@ -142,10 +143,10 @@ public class WebServerCommunicator
             if(items.Length > 15)
             {
                 LinkedList<Quest> quests = user.GetQuests();
-                for(int i = 18; i < items.Length; i += 22)
+                for(int i = 18; i < items.Length; i += 24)
                 {
-                    Quest_info qi = new Quest_info(items[i], "");
-                    quests.AddLast(new Quest(qi, Int32.Parse(items[i + 2]), Int32.Parse(items[i + 4]), new GPSCoordinate(Double.Parse(items[i + 14]), Double.Parse(items[i + 16]), ""), new GPSCoordinate(Double.Parse(items[i + 18]), Double.Parse(items[i + 20]), "")));
+                    Quest_info qi = new Quest_info(items[i], items[i+2]);
+                    quests.AddLast(new Quest(qi, Int32.Parse(items[i+4]), Int32.Parse(items[i+6]), new GPSCoordinate(Double.Parse(items[i+14]), Double.Parse(items[i+16]),""), new GPSCoordinate(Double.Parse(items[i+18]), Double.Parse(items[i+20]),"")));
                 }
             }
 

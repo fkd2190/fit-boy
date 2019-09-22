@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Text;
+using Mapbox.Unity.MeshGeneration.Factories;
+using Mapbox.Utils;
 
 public class FitBoyGUI : MonoBehaviour
 {
@@ -82,6 +84,10 @@ public class FitBoyGUI : MonoBehaviour
 
     public void UpdateProfileGUI(User user)
     {
+        foreach (Transform child in GameObject.Find("Content").transform)
+        {
+            Destroy(child.gameObject);
+        }
         GameObject.Find("ProfileUsername").GetComponent<Text>().text = user.GetUsername();
         GameObject.Find("XPSlider").GetComponent<Slider>().value = user.GetXp();
         GameObject.Find("ProfileXp").GetComponent<Text>().text = user.GetXp() + "/100";
@@ -91,14 +97,11 @@ public class FitBoyGUI : MonoBehaviour
         foreach(Quest quest in userQuests)
         {
             GameObject newQuest = Instantiate(questButtonPrefab);
+            newQuest.GetComponent<Button>().interactable = false;
             newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.info.Title;
             newQuest.transform.Find("Description").GetComponent<Text>().text = quest.info.Desc;
             //Add details
-            Transform detailPanel = newQuest.transform.Find("DetailPanel");
-            detailPanel.transform.Find("StartCoordinate").GetComponent<Text>().text = quest.Start_co.Lat + ", " + quest.Start_co.Lon;
-            detailPanel.transform.Find("EndCoordinate").GetComponent<Text>().text = quest.Stop_co.Lat + ", " + quest.Stop_co.Lon;
-            detailPanel.transform.Find("XP").GetComponent<Text>().text = "" + quest.Xp_reward;
-            detailPanel.transform.Find("Level").GetComponent<Text>().text = "" + quest.Level;
+            
 
             newQuest.transform.SetParent(GameObject.Find("Content").transform, false);
         }
@@ -106,16 +109,19 @@ public class FitBoyGUI : MonoBehaviour
 
     public void FillQuestGUI()
     {
-
-        for(int i = 0; i<3; i++)
+        foreach (Transform child in GameObject.Find("NewQuests").transform)
         {
-            Make_quests mq = new Make_quests();
+            Destroy(child.gameObject);
+        }
+        Make_quests mq = new Make_quests();
+        for (int i = 0; i<3; i++)
+        {
             Quest quest = mq.Gen_Quest();
             GameObject newQuest = Instantiate(questButtonPrefab);
             newQuest.GetComponent<QuestObject>().quest = quest;
             newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.info.Title;
             newQuest.transform.Find("Description").GetComponent<Text>().text = quest.info.Desc;
-            newQuest.transform.Find("QuestDetails").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + "Level: " + quest.Level;
+            newQuest.transform.Find("QuestDetails").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + " Level: " + quest.Level;
 
             newQuest.transform.SetParent(GameObject.Find("NewQuests").transform, false);
         }
@@ -142,11 +148,21 @@ public class FitBoyGUI : MonoBehaviour
         }
     }
 
+    public void StartQuest(Quest quest)
+    {
+        GameObject.Find("Directions").GetComponent<DirectionsFactory>().endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
+        GameObject.Find("QuestPanel").GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
+        controller.SetActiveQuest(quest);
+        Debug.Log(quest.Stop_co.Lat);
+        Debug.Log("Quest Started");
+    }
+
     public void LogOut(GameObject LoginPanel)
     {
         GameObject.Find("SettingsPanel").GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
         LoginPanel.SetActive(true);
         controller.GetWebServerCommunicator().UpdateUser(controller.GetUser());
         controller.SetUser(null);
+        controller.SetActiveQuest(null);
     }
 }
