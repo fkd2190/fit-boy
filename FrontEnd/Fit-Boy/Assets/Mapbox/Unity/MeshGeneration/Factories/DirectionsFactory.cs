@@ -93,6 +93,10 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                     quest.Start_co = new GPSCoordinate(wp[0].x, wp[0].y, "");
                 }
                 wp[1] = endPos;
+                if(controller.CheckFinished(wp[0].x, wp[0].y, wp[1].x, wp[1].y))
+                {
+                    controller.CompleteQuest();
+                }
             }
 			var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);
 			_directionResource.Steps = true;
