@@ -5,7 +5,7 @@
     
     public double Lon;
     
-    string Name = null;
+    public string Name = null;
     
     public GPSCoordinate(double lat, double lon, string name)
 {
