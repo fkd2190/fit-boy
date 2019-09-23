@@ -117,7 +117,7 @@ public class FitBoyGUI : MonoBehaviour
         for (int i = 0; i<3; i++)
         {
             Quest quest = mq.Gen_Quest();
-            //quest.Stop_co = new GPSCoordinate(60.190986, 24.966124, ""); //USe these values when testing in editor.
+            quest.Stop_co = new GPSCoordinate(60.190986, 24.966124, ""); //USe these values when testing in editor.
             GameObject newQuest = Instantiate(questButtonPrefab);
             newQuest.GetComponent<QuestObject>().quest = quest;
             newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.info.Title;

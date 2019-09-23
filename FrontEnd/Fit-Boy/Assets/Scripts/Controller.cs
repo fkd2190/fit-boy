@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour
     public User user;
     public WebServerCommunicator wsc;
     public Quest activeQuest;
+    public GameObject questFinishedPanel;
 
 
     public Controller()
@@ -42,6 +43,13 @@ public class Controller : MonoBehaviour
 
     public void CompleteQuest()
     {
+        StartCoroutine(CompleteQuestCoroutine());
+    }
+
+    public IEnumerator CompleteQuestCoroutine()
+    {
+        questFinishedPanel.SetActive(true);
+        yield return null;
         Debug.Log(user.GetUserID());
         wsc.UploadQuest(activeQuest, user);
         user.AddXp(activeQuest.Xp_reward);
@@ -49,29 +57,6 @@ public class Controller : MonoBehaviour
         wsc.UpdateUser(user);
         activeQuest = null;
         GameObject.Find("InitClasses").GetComponent<FitBoyGUI>().UpdateProfileGUI(user);
-    }
-
-    public bool CheckFinished(GPSCoordinate current, GPSCoordinate dest)
-    {
-        Debug.Log(current.Lat + " " + current.Lon);
-        Debug.Log(dest.Lat + " " + dest.Lon);
-        bool arrived = false;
-        if (((current.Lat
-                    <= (dest.Lat + 0.0001))
-                    && (current.Lat
-                    >= (dest.Lat - 0.0001))))
-        {
-            if (((current.Lon
-                        <= (dest.Lon + 0.0001))
-                        && (current.Lon
-                        >= (dest.Lon - 0.0001))))
-            {
-                arrived = true;
-            }
-
-        }
-
-        return arrived;
     }
 
     public bool CheckFinished(double lat1, double lon1, double lat2, double lon2)
@@ -90,7 +75,7 @@ public class Controller : MonoBehaviour
             //Convert to m
             dist = dist * 1.609344 * 1000;
             Debug.Log(dist);
-            return (dist < 10);
+            return (dist < 20);
         }
     }
 
