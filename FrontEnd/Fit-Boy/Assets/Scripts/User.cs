@@ -10,6 +10,7 @@ public class User
     private int xp;
     private int level;
     private LinkedList<Quest> userQuests;
+    private LinkedList<User> friends;
 
     public User()
     {
@@ -28,6 +29,11 @@ public class User
         this.xp = xp;
         this.level = level;
         userQuests = new LinkedList<Quest>();
+    }
+
+    public User(string username, int xp, int level):this(0, username, "", xp, level)
+    {
+
     }
 
     public string GetUsername()
@@ -71,5 +77,15 @@ public class User
     public LinkedList<Quest> GetQuests()
     {
         return userQuests;
+    }
+
+    public LinkedList<User> GetFriends()
+    {
+        return friends;
+    }
+
+    public void SetFriends(LinkedList<User> friends)
+    {
+        this.friends = friends;
     }
 }

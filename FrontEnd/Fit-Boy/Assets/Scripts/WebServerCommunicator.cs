@@ -109,6 +109,56 @@ public class WebServerCommunicator
         return false;
     }
 
+    public bool AddFriend(string username, string friendUsername)
+    {
+        using (WebClient client = new WebClient())
+        {
+            var data = new System.Collections.Specialized.NameValueCollection();
+            data.Add("username", username);
+            data.Add("friend_username", friendUsername);
+            byte[] responsebytes = client.UploadValues(WEB_SERVER_ADDRESS + "add_friend.php", "POST", data);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            Debug.Log(responsebody);
+            JSONResponse response = new JSONResponse(responsebody);
+            ErrorMessage = response.message;
+            return !response.error;
+        }
+        return false;
+    }
+
+    public bool DeleteFriend(string username, string friendUsername)
+    {
+        using (WebClient client = new WebClient())
+        {
+            var data = new System.Collections.Specialized.NameValueCollection();
+            data.Add("username", username);
+            data.Add("friend_username", friendUsername);
+            byte[] responsebytes = client.UploadValues(WEB_SERVER_ADDRESS + "delete_friend.php", "POST", data);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            Debug.Log(responsebody);
+            JSONResponse response = new JSONResponse(responsebody);
+            ErrorMessage = response.message;
+            return !response.error;
+        }
+        return false;
+    }
+
+    public LinkedList<User> GetFriends(int user_id)
+    {
+        using (WebClient client = new WebClient())
+        {
+            var data = new System.Collections.Specialized.NameValueCollection();
+            data.Add("user_id", ""+user_id);
+            byte[] responsebytes = client.UploadValues(WEB_SERVER_ADDRESS + "get_friends.php", "POST", data);
+            string responsebody = Encoding.UTF8.GetString(responsebytes);
+            Debug.Log(responsebody);
+            JSONResponse response = new JSONResponse(responsebody);
+            ErrorMessage = response.message;
+            return response.friends;
+        }
+        return null;
+    }
+
     public string GetLastErrorMessage()
     {
         return ErrorMessage;
@@ -120,6 +170,7 @@ public class WebServerCommunicator
         public bool error;
         public string message;
         public User user;
+        public LinkedList<User> friends;
 
         public JSONResponse(string response)
         {
@@ -132,7 +183,7 @@ public class WebServerCommunicator
             {
                 Debug.Log(i + " " + items[i]);
             }
-            if (items.Length > 4)
+            if (items.Length > 4 && items[4].Equals("user"))
             {
                 if (!items[5].Equals("null"))
                 {
@@ -140,13 +191,24 @@ public class WebServerCommunicator
                 }
             }
 
-            if(items.Length > 15)
+            //quests
+            if(items.Length > 15 && items[15].Equals("quests"))
             {
                 LinkedList<Quest> quests = user.GetQuests();
                 for(int i = 18; i < items.Length; i += 24)
                 {
                     Quest_info qi = new Quest_info(items[i], items[i+2]);
                     quests.AddLast(new Quest(qi, Int32.Parse(items[i+4]), Int32.Parse(items[i+6]), new GPSCoordinate(Double.Parse(items[i+14]), Double.Parse(items[i+16]),""), new GPSCoordinate(Double.Parse(items[i+18]), Double.Parse(items[i+20]),"")));
+                }
+            }
+
+            //friends
+            if(items.Length > 4 && items[4].Equals("friends"))
+            {
+                friends = new LinkedList<User>();
+                for(int i = 7; i < items.Length; i += 6)
+                {
+                    friends.AddLast(new User(items[i], Int32.Parse(items[i + 2]), Int32.Parse(items[i + 4])));
                 }
             }
 

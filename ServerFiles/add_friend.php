@@ -1,5 +1,5 @@
 <?php
-$response['error'] = true;
+$response['error'] = false;
 $response['message'] = "Unknown Error";
 include "db_connection.php";
 
@@ -29,15 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $response['message'] .= "Friend username not found in the database. ";
     }
 
-    //add to database
-    $query = "INSERT INTO friends VALUES ({$user_id}, {$friend_id}), ({$friend_id}, {$user_id})";
-    $result = $conn->query($query);
-    if(!$conn->error){
-        $response['error'] = false;
-        $response['message'] = "Friends successfully added.";
-    }else{
-        $response['error'] = true;
-        $response['message'] = "Database Error: " . $conn->error;
+    if(!$response['error']) {
+        //add to database
+        $query = "INSERT INTO friends VALUES ({$user_id}, {$friend_id}), ({$friend_id}, {$user_id})";
+        $result = $conn->query($query);
+        if (!$conn->error) {
+            $response['error'] = false;
+            $response['message'] = "Friends successfully added.";
+        } else {
+            $response['error'] = true;
+            $response['message'] = "Database Error: " . $conn->error;
+        }
     }
 }else{
     $response['error'] = true;

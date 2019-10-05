@@ -1,5 +1,5 @@
 <?php
-$response['error'] = true;
+$response['error'] = false;
 $response['message'] = "Unknown Error";
 include "db_connection.php";
 
@@ -19,14 +19,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $response['message'] .= "First username not found in the database. ";
     }
 
-    //get friend_id
-    $query = "SELECT user_id FROM users WHERE username = '{$friend_username}'";
-    $result = $conn->query($query);
-    if($result->num_rows > 0){
-        $friend_id = $result->fetch_assoc()['user_id'];
-    }else{
-        $response['error'] = true;
-        $response['message'] .= "Friend username not found in the database. ";
+    if(!$response['error']) {
+        //get friend_id
+        $query = "SELECT user_id FROM users WHERE username = '{$friend_username}'";
+        $result = $conn->query($query);
+        if ($result->num_rows > 0) {
+            $friend_id = $result->fetch_assoc()['user_id'];
+        } else {
+            $response['error'] = true;
+            $response['message'] .= "Friend username not found in the database. ";
+        }
     }
 
     //remove from database

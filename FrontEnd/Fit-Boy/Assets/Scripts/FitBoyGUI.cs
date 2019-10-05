@@ -28,6 +28,7 @@ public class FitBoyGUI : MonoBehaviour
         Color ErrorTextColor = ErrorText.color;
 
         User user = controller.GetWebServerCommunicator().AuthenticateUser(loginUsername.text, loginPassword.text);
+        user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
         controller.SetUser(user);
 
         if (user != null)
