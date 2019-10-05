@@ -50,5 +50,19 @@
 	end time: (YYYY-MM-DD hh:mm:ss)<input type="text" name="end_time"><br>
     <input type="submit">
 </form>
+
+<h3>Add friend</h3>
+<form action="add_friend.php" method="POST">
+    Username:<input type="text" name="username"><br>
+    Friend username: <input type="text" name="friend_username"><br>
+    <input type="submit" name="submit">
+</form>
+
+<h3>Remove Friend</h3>
+<form action="delete_friend.php" method="POST">
+    Username:<input type="text" name="username"><br>
+    Friend username: <input type="text" name="friend_username"><br>
+    <input type="submit" name="submit">
+</form>
 </body>
 </html>
