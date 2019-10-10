@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1AFD156B-0242-4702-B143-AEF08D267F99}"
+	ProjectSection(SolutionItems) = preProject
+		Coordinate.cs = Coordinate.cs
+		Fit_Boy_Quest_engine.cs = Fit_Boy_Quest_engine.cs
+		Gen_level.cs = Gen_level.cs
+		Gen_xp.cs = Gen_xp.cs
+		Quest.cs = Quest.cs
+		Quest_info.cs = Quest_info.cs
+		Gen_Rad_Zones.cs = Gen_Rad_Zones.cs
+		Compair_coordinates.cs = Compair_coordinates.cs
+		Radiation_Zone.cs = Radiation_Zone.cs
+		Make_quests.cs = Make_quests.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+	EndGlobalSection
+EndGlobal
