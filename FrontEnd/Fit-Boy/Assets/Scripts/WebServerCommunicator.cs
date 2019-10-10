@@ -29,13 +29,22 @@ public class WebServerCommunicator
         return false;
     }
 
-    public User AuthenticateUser(string username, string password)
+    public User AuthenticateUser(string username, string password, bool remembered)
     {
         using (WebClient client = new WebClient())
         {
             var data = new System.Collections.Specialized.NameValueCollection();
             data.Add("username", username);
             data.Add("password", password);
+            if (remembered)
+            {
+                data.Add("remembered", "true");
+            }
+            else
+            {
+                data.Add("remembered", "false");
+            }
+            
             byte[] responsebytes = client.UploadValues(WEB_SERVER_ADDRESS + "authenticate_user.php", "POST", data);
             string responsebody = Encoding.UTF8.GetString(responsebytes);
             JSONResponse response = new JSONResponse(responsebody);
@@ -45,6 +54,12 @@ public class WebServerCommunicator
             return response.user;
         }
         return null;
+    }
+
+    public User AuthenticateUser(string username, string password)
+    {
+        //Overloaded Method that authenticates the user without a password
+        return AuthenticateUser(username, password, false);
     }
 
     public bool UploadQuest(Quest quest, User user)

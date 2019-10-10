@@ -6,12 +6,33 @@ using UnityEngine.UI;
 using System.Text;
 using Mapbox.Unity.MeshGeneration.Factories;
 using Mapbox.Utils;
+using System.IO;
 
 public class FitBoyGUI : MonoBehaviour
 {
     public Controller controller;
     public GameObject LoadingPanel;
     public GameObject questButtonPrefab;
+
+    public void Start()
+    {
+        string filePath = Application.persistentDataPath + "/settings.dat";
+        if (File.Exists(filePath))
+        {
+            string[] fileContents = File.ReadAllLines(filePath);
+            User user = controller.GetWebServerCommunicator().AuthenticateUser(fileContents[0], "emptyPassword", true);
+
+            controller.SetUser(user);
+
+            if (user != null)
+            {
+                user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
+                UpdateProfileGUI(user);
+                FillQuestGUI();
+                GameObject.Find("LoginPanel").SetActive(false);
+            }
+        }
+    }
 
     public void LoginButton()
     {
@@ -24,19 +45,35 @@ public class FitBoyGUI : MonoBehaviour
         yield return null;
         InputField loginUsername = GameObject.Find("LoginUsername").GetComponent<InputField>();
         InputField loginPassword = GameObject.Find("LoginPassword").GetComponent<InputField>();
+        Toggle rememberToggle = GameObject.Find("RememberMeToggle").GetComponent<Toggle>();
         Text ErrorText = GameObject.Find("LoginErrorText").GetComponent<Text>();
         Color ErrorTextColor = ErrorText.color;
 
+        
+
         User user = controller.GetWebServerCommunicator().AuthenticateUser(loginUsername.text, loginPassword.text);
-        user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
+
         controller.SetUser(user);
 
         if (user != null)
         {
+            user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
             UpdateProfileGUI(user);
             FillQuestGUI();
             GameObject.Find("LoginPanel").SetActive(false);
             ErrorText.color = ErrorTextColor;
+
+            if (rememberToggle.isOn)
+            {
+                string filePath = Application.persistentDataPath + "/settings.dat";
+                string[] fileContents = new string[1];
+                if (File.Exists(filePath))
+                {
+                    fileContents = File.ReadAllLines(filePath);
+                }
+                fileContents[0] = loginUsername.text;
+                File.WriteAllLines(filePath, fileContents);
+            }
         }
         else
         {
@@ -168,5 +205,12 @@ public class FitBoyGUI : MonoBehaviour
         controller.GetWebServerCommunicator().UpdateUser(controller.GetUser());
         controller.SetUser(null);
         controller.SetActiveQuest(null);
+        string filePath = Application.persistentDataPath + "/settings.dat";
+        if (File.Exists(filePath))
+        {
+            string[] fileContents = File.ReadAllLines(filePath);
+            fileContents[0] = "";
+            File.WriteAllLines(filePath, fileContents);
+        }
     }
 }
