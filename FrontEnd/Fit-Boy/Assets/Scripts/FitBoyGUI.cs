@@ -13,6 +13,20 @@ public class FitBoyGUI : MonoBehaviour
     public GameObject LoadingPanel;
     public GameObject questButtonPrefab;
 
+    public void ResetPasswordButton()
+    {
+        StartCoroutine(ResetPassword());
+    }
+
+    public IEnumerator ResetPassword()
+    {
+        LoadingPanel.SetActive(true);
+        yield return null;
+
+        //do login stuff
+
+    }
+
     public void LoginButton()
     {
         StartCoroutine(Login());
