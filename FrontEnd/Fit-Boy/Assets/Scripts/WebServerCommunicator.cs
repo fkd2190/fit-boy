@@ -47,9 +47,22 @@ public class WebServerCommunicator
 
     public User AuthenticateUser(string username, string password)
     {
+        return AuthenticateUser(username, password, false);
+    }
+
+    public User AuthenticateUser(string username, string password, bool remembered)
+    {
         var data = new System.Collections.Specialized.NameValueCollection();
         data.Add("username", username);
         data.Add("password", password);
+        if (remembered)
+        {
+            data.Add("remembered", "true");
+        }
+        else
+        {
+            data.Add("remembered", "false");
+        }
         return WebCommunication("authenticate_user", data).user;
     }
 
@@ -120,6 +133,14 @@ public class WebServerCommunicator
         data.Add("user_id", "" + user_id);
 
         return WebCommunication("get_friends", data).friends;
+    }
+
+    public bool ResetPassword(string email)
+    {
+        var data = new System.Collections.Specialized.NameValueCollection();
+        data.Add("email", email);
+
+        return !WebCommunication("password_reset", data).error;
     }
 
     public string GetLastErrorMessage()

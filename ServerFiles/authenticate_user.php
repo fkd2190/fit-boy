@@ -8,6 +8,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Get data from post variables
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $remembered = "";
+    if(isset($_POST['remembered'])){
+        $remembered = $_POST['remembered'];
+    }
 
     //Get Record from database
     $query = "SELECT * FROM users WHERE username='{$username}'";
@@ -18,7 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }else{
         $user = $result->fetch_assoc();
         $password_hash = $user['password'];
-        if(password_verify($password, $password_hash)){
+        $temp_password_hash = $user['temp_password'];
+        if($remembered == "true" || password_verify($password, $password_hash) || password_verify($password, $temp_password_hash)){
             $response['error'] = false;
             $response['message'] = "User authenticated successfully.";
             $response['user'] = $user;
@@ -31,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
             unset($response['user']['password']);
+            unset($response['user']['temp_password']);
         }else{
             $response['error'] = true;
             $response['message'] = "Username or password incorrect.";
