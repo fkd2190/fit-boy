@@ -9,7 +9,7 @@ using System.Collections.Specialized;
 
 public class WebServerCommunicator
 {
-    private const string WEB_SERVER_ADDRESS = "http://localhost/fit-boy/";
+    private const string WEB_SERVER_ADDRESS = "https://fitboy.tk/";
     private string ErrorMessage;
 
     private JSONResponse WebCommunication(string serverPage, NameValueCollection data)
