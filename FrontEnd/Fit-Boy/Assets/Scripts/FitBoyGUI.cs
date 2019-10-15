@@ -39,23 +39,23 @@ public class FitBoyGUI : MonoBehaviour
         InputField loginUsername = GameObject.Find("LoginUsername").GetComponent<InputField>();
         InputField loginPassword = GameObject.Find("LoginPassword").GetComponent<InputField>();
         Text ErrorText = GameObject.Find("LoginErrorText").GetComponent<Text>();
-        Color ErrorTextColor = ErrorText.color;
 
         User user = controller.GetWebServerCommunicator().AuthenticateUser(loginUsername.text, loginPassword.text);
-        user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
         controller.SetUser(user);
 
         if (user != null)
         {
+            user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
             UpdateProfileGUI(user);
             FillQuestGUI();
+            loginUsername.text = "";
+            loginPassword.text = "";
+            ErrorText.text = "";
             GameObject.Find("LoginPanel").SetActive(false);
-            ErrorText.color = ErrorTextColor;
         }
         else
         {
             ErrorText.text = controller.GetWebServerCommunicator().GetLastErrorMessage().Replace("\\n", "\n");
-            ErrorText.color = Color.red;
         }
         LoadingPanel.SetActive(false);
     }
@@ -74,19 +74,21 @@ public class FitBoyGUI : MonoBehaviour
         InputField registerPassword = GameObject.Find("RegisterPassword").GetComponent<InputField>();
         InputField registerConfirmPassword = GameObject.Find("RegisterConfirmPassword").GetComponent<InputField>();
         Text ErrorText = GameObject.Find("RegisterErrorText").GetComponent<Text>();
-        Color ErrorTextColor = ErrorText.color;
 
         if (!registerPassword.text.Equals(registerConfirmPassword.text))
         {
             ErrorText.text = "Passwords do not match";
-            ErrorText.color = Color.red;
         }
         else
         {
             if (controller.GetWebServerCommunicator().RegisterUser(registerUsername.text, registerEmail.text, registerPassword.text))
             {
+                registerUsername.text = "";
+                registerEmail.text = "";
+                registerPassword.text = "";
+                registerConfirmPassword.text = "";
                 GameObject.Find("RegisterPanel").SetActive(false);
-                ErrorText.color = ErrorTextColor;
+                ErrorText.text = "";
             }
             else
             {
