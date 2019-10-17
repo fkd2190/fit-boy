@@ -1,5 +1,4 @@
-﻿package Fit_Boy_Quest_engine;
-public class Radiation_Zone
+﻿public class Radiation_Zone
 {
 
 	Coordinate coordinate;

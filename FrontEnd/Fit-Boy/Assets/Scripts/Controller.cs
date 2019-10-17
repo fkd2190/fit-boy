@@ -9,6 +9,7 @@ public class Controller : MonoBehaviour
     public WebServerCommunicator wsc;
     public Quest activeQuest;
     public GameObject questFinishedPanel;
+    public ArrayList RadiationZones;
 
 
     public Controller()
@@ -52,6 +53,10 @@ public class Controller : MonoBehaviour
         yield return null;
         Debug.Log(user.GetUserID());
         wsc.UploadQuest(activeQuest, user);
+        if (activeQuest.crossedRadZone)
+        {
+            activeQuest.Xp_reward *= 2; //double xp if crossed rad zone
+        }
         user.AddXp(activeQuest.Xp_reward);
         user.GetQuests().AddLast(activeQuest);
         wsc.UpdateUser(user);
@@ -61,9 +66,14 @@ public class Controller : MonoBehaviour
 
     public bool CheckFinished(double lat1, double lon1, double lat2, double lon2)
     {
+        return (CalculateDistance(lat1, lon1, lat2, lon2) < 20);
+    }
+
+    public double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+    {
         if ((lat1 == lat2) && (lon1 == lon2))
         {
-            return true;
+            return 0;
         }
         else
         {
@@ -75,8 +85,17 @@ public class Controller : MonoBehaviour
             //Convert to m
             dist = dist * 1.609344 * 1000;
             Debug.Log(dist);
-            return (dist < 20);
+            return dist;
         }
+    }
+
+    public bool CheckInZone(double lat1, double lon1)
+    {
+        foreach(Radiation_Zone zone in RadiationZones)
+        {
+            return (CalculateDistance(lat1, lon1, zone.coordinate.Lat, zone.coordinate.Lon) <= zone.radius);
+        }
+        return false;
     }
 
     private double deg2rad(double deg)

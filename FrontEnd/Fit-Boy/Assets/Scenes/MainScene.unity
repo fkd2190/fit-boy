@@ -735,6 +735,7 @@ MonoBehaviour:
   LoadingPanel: {fileID: 1165958062}
   questButtonPrefab: {fileID: 3247938227180872402, guid: d79807843d9060444a2558dec1ceb8e4,
     type: 3}
+  cube: {fileID: 487878092103464384, guid: 40be9f88b1c46e041b8f30a5ab4e2c0e, type: 3}
 --- !u!1 &119041283
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,7 +1503,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000042586387, y: -0.0000060666835}
+  m_AnchoredPosition: {x: 0.000042586387, y: -0.000058946716}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &250152888

@@ -72,14 +72,14 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 			_map.OnUpdated -= Query;
 		}
 
-		void Query()
+		public void Query()
 		{
 			var count = _waypoints.Length;
 			var wp = new Vector2d[count];
 
                 wp[0] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
-            
-            if(controller.GetActiveQuest() == null)
+
+            if (controller.GetActiveQuest() == null)
             {
                 Debug.Log("Is null");
                 wp[1] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
@@ -96,6 +96,11 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                 if(controller.CheckFinished(wp[0].x, wp[0].y, wp[1].x, wp[1].y))
                 {
                     controller.CompleteQuest();
+                }
+                if(!controller.activeQuest.crossedRadZone && controller.CheckInZone(wp[0].x, wp[0].y))
+                {
+                    controller.activeQuest.crossedRadZone = true;
+                    Debug.Log("Crossed Rad Zone");
                 }
             }
 			var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);

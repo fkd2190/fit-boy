@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using System.Text;
 using Mapbox.Unity.MeshGeneration.Factories;
 using Mapbox.Utils;
+using Mapbox.Unity.Map;
+using Mapbox.Unity.Utilities;
 using System.IO;
 
 public class FitBoyGUI : MonoBehaviour
@@ -13,6 +15,7 @@ public class FitBoyGUI : MonoBehaviour
     public Controller controller;
     public GameObject LoadingPanel;
     public GameObject questButtonPrefab;
+    public GameObject cube;
 
     public void Start()
     {
@@ -84,7 +87,6 @@ public class FitBoyGUI : MonoBehaviour
             user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
             UpdateProfileGUI(user);
             FillQuestGUI();
-
             if (rememberToggle.isOn)
             {
                 string filePath = Application.persistentDataPath + "/settings.dat";
@@ -220,7 +222,10 @@ public class FitBoyGUI : MonoBehaviour
 
     public void StartQuest(Quest quest)
     {
-        GameObject.Find("Directions").GetComponent<DirectionsFactory>().endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
+        DirectionsFactory df = GameObject.Find("Directions").GetComponent<DirectionsFactory>();
+        df.endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
+        df.Query();
+        DrawRadiationZones();
         GameObject.Find("QuestPanel").GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
         controller.SetActiveQuest(quest);
         Debug.Log(quest.Stop_co.Lat);
@@ -240,6 +245,19 @@ public class FitBoyGUI : MonoBehaviour
             string[] fileContents = File.ReadAllLines(filePath);
             fileContents[0] = "";
             File.WriteAllLines(filePath, fileContents);
+        }
+    }
+
+    private void DrawRadiationZones()
+    {
+        AbstractMap map = GameObject.Find("Map").GetComponent<AbstractMap>();
+        Vector2d location = GameObject.Find("PlayerTarget").transform.GetGeoPosition(map.CenterMercator, map.WorldRelativeScale);
+        Debug.Log("Loc: " + location.x + " " + location.y);
+        controller.RadiationZones = Gen_Rad_Zone.In_rad_zone(new GPSCoordinate(location.x, location.y, "")); //Generate radiation zones around player location
+        foreach (Radiation_Zone zone in controller.RadiationZones)
+        {
+            GameObject radZone = Instantiate(cube);
+            radZone.transform.MoveToGeocoordinate(zone.coordinate.Lat, zone.coordinate.Lon, map.CenterMercator, map.WorldRelativeScale);
         }
     }
 }
