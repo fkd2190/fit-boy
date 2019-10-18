@@ -4,7 +4,7 @@ using SimpleJSON;
 
 public class WeatherAPI : MonoBehaviour
 {
-    public string url = "http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&APPID=f345b05b38a618ce356cc179bafec0e0";
+    public string url; // = "http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&APPID=f345b05b38a618ce356cc179bafec0e0";
     public string city;
     public string weatherDescription;
     public float temp;

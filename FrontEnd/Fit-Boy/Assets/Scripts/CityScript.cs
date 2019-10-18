@@ -9,8 +9,6 @@ public class CityScript : MonoBehaviour
     public Sprite clouds;
     public Sprite rain;
     public Sprite clear;
-    public int lat = -36;
-    public int lon = 175;
     Text cityText;
     Text wind;
     Text city;
@@ -25,7 +23,7 @@ public class CityScript : MonoBehaviour
         city = GameObject.Find("Location").GetComponent<Text>();
         desc = GameObject.Find("Desc").GetComponent<Text>();
         weather = gameObject.AddComponent<WeatherAPI>();
-        weather.url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&APPID=f345b05b38a618ce356cc179bafec0e0";
+        weather.url = "http://api.openweathermap.org/data/2.5/weather?q=Auckland&APPID=f345b05b38a618ce356cc179bafec0e0";
     }
     // Update is called once per frame
     void Update()
