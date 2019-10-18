@@ -25,11 +25,12 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 		Transform[] _waypoints;
 		private List<Vector3> _cachedWaypoints;
 
-		[SerializeField]
+        public Vector2d endPos;
+        public Controller controller;
+
+        [SerializeField]
 		[Range(1,10)]
 		private float UpdateFrequency = 2;
-
-		
 
 		private Directions _directions;
 		private int _counter;
@@ -75,11 +76,29 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 		{
 			var count = _waypoints.Length;
 			var wp = new Vector2d[count];
-			for (int i = 0; i < count; i++)
-			{
-				wp[i] = _waypoints[i].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
-			}
-			var _directionResource = new DirectionResource(wp, RoutingProfile.Driving);
+
+                wp[0] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
+            
+            if(controller.GetActiveQuest() == null)
+            {
+                Debug.Log("Is null");
+                wp[1] = _waypoints[0].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
+            }
+            else
+            {
+                Quest quest = controller.GetActiveQuest();
+                Debug.Log("Quest Started");
+                if(quest.Start_co == null)
+                {
+                    quest.Start_co = new GPSCoordinate(wp[0].x, wp[0].y, "");
+                }
+                wp[1] = endPos;
+                if(controller.CheckFinished(wp[0].x, wp[0].y, wp[1].x, wp[1].y))
+                {
+                    controller.CompleteQuest();
+                }
+            }
+			var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);
 			_directionResource.Steps = true;
 			_directions.Query(_directionResource, HandleDirectionsResponse);
 		}

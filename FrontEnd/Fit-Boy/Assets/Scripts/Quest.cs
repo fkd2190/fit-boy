@@ -1,18 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Quest
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public Quest_info info { get; set; }
+	public int Xp_reward { get; set; }
+    public GPSCoordinate Stop_co { get; set; }
+    public GPSCoordinate Start_co { get; set; }
+    public int Level;
+
+	public Quest(Quest_info info, int xp_reward, int level, GPSCoordinate Start_co, GPSCoordinate stop_co)
+	{
+		this.info = info;
+		this.Xp_reward = xp_reward;
+		this.Level = level;
+        this.Start_co = Start_co;
+		this.Stop_co = stop_co;
+	}
 }
