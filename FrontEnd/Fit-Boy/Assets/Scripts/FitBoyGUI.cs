@@ -17,6 +17,7 @@ public class FitBoyGUI : MonoBehaviour
     public GameObject LoadingPanel;
     public GameObject questButtonPrefab;
     public GameObject cube;
+    public GameObject friendButtonPrefab;
 
     public void Start()
     {
@@ -34,8 +35,58 @@ public class FitBoyGUI : MonoBehaviour
                 user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
                 UpdateProfileGUI(user);
                 FillQuestGUI();
+                UpdateFriendGUI();
                 GameObject.Find("LoginPanel").SetActive(false);
             }
+        }
+    }
+
+    public void AddFriendButton()
+    {
+        StartCoroutine(AddFriend());
+    }
+
+    public IEnumerator AddFriend()
+    {
+        LoadingPanel.SetActive(true);
+        yield return null;
+
+        InputField friendUsername = GameObject.Find("AddFriendUsername").GetComponent<InputField>();
+        Text errorText = GameObject.Find("AddFriendErrorText").GetComponent<Text>();
+
+        if (controller.GetWebServerCommunicator().AddFriend(controller.GetUser().GetUsername(), friendUsername.text))
+        {
+            friendUsername.text = "";
+            errorText.text = "";
+            User u = controller.GetUser();
+            u.SetFriends(controller.GetWebServerCommunicator().GetFriends(u.GetUserID()));
+            UpdateFriendGUI();
+        }
+        else
+        {
+            errorText.text = controller.GetWebServerCommunicator().GetLastErrorMessage();
+        }
+        LoadingPanel.SetActive(false);
+    }
+
+    public void UpdateFriendGUI()
+    {
+        foreach (Transform child in GameObject.Find("FriendsList").transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (User friend in controller.GetUser().GetFriends())
+        {
+            GameObject newFriend = Instantiate(friendButtonPrefab);
+            newFriend.GetComponent<FriendButtonPrefabScript>().friend = friend;
+            newFriend.transform.Find("FriendUsername").GetComponent<Text>().text = friend.GetUsername();
+            newFriend.transform.Find("FriendXpValue").GetComponent<Text>().text = "" + friend.GetXp();
+            newFriend.transform.Find("FriendLevelValue").GetComponent<Text>().text = "" + friend.GetLevel();
+            //Add details
+
+
+            newFriend.transform.SetParent(GameObject.Find("FriendsList").transform, false);
         }
     }
 
@@ -88,6 +139,7 @@ public class FitBoyGUI : MonoBehaviour
             user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
             UpdateProfileGUI(user);
             FillQuestGUI();
+            UpdateFriendGUI();
             if (rememberToggle.isOn)
             {
                 string filePath = Application.persistentDataPath + "/settings.dat";
@@ -170,7 +222,8 @@ public class FitBoyGUI : MonoBehaviour
             newQuest.GetComponent<Button>().interactable = false;
             newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.info.Title;
             newQuest.transform.Find("Description").GetComponent<Text>().text = quest.info.Desc;
-            newQuest.transform.Find("Description").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + " Level: " + quest.Level;
+            newQuest.transform.Find("QuestLocation").GetComponent<Text>().text = quest.Stop_co.Name;
+            newQuest.transform.Find("QuestDetails").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + " Level: " + quest.Level;
             //Add details
             
 
