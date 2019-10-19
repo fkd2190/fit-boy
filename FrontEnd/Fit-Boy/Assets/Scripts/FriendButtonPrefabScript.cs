@@ -30,7 +30,8 @@ public class FriendButtonPrefabScript : MonoBehaviour
             newQuest.GetComponent<Button>().interactable = false;
             newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.info.Title;
             newQuest.transform.Find("Description").GetComponent<Text>().text = quest.info.Desc;
-            newQuest.transform.Find("Description").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + " Level: " + quest.Level;
+            newQuest.transform.Find("QuestLocation").GetComponent<Text>().text = quest.Stop_co.Name;
+            newQuest.transform.Find("QuestDetails").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + " Level: " + quest.Level;
             //Add details
 
 
