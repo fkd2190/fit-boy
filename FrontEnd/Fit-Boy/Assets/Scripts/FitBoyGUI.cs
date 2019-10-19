@@ -18,6 +18,7 @@ public class FitBoyGUI : MonoBehaviour
     public GameObject questButtonPrefab;
     public GameObject cube;
     public GameObject friendButtonPrefab;
+    public GameObject successDialog;
 
     public void Start()
     {
@@ -39,6 +40,69 @@ public class FitBoyGUI : MonoBehaviour
                 GameObject.Find("LoginPanel").SetActive(false);
             }
         }
+    }
+
+    public void ChangePasswordButton()
+    {
+        StartCoroutine(ChangePassword());
+    }
+
+    public IEnumerator ChangePassword()
+    {
+        LoadingPanel.SetActive(true);
+        yield return null;
+
+        InputField oldPassword = GameObject.Find("OldPassword").GetComponent<InputField>();
+        InputField newPassword = GameObject.Find("ChangePassword").GetComponent<InputField>();
+        InputField confirmPassword = GameObject.Find("ConfirmChangePassword").GetComponent<InputField>();
+        Text errorText = GameObject.Find("SettingsErrorText").GetComponent<Text>();
+
+        if (newPassword.text.Equals(confirmPassword.text))
+        {
+            if(controller.GetWebServerCommunicator().UpdateUser(controller.GetUser(), "", oldPassword.text, newPassword.text))
+            {
+                successDialog.SetActive(true);
+                errorText.text = "";
+            }
+            else
+            {
+                errorText.text = controller.GetWebServerCommunicator().GetLastErrorMessage();
+            }
+        }
+        else
+        {
+            errorText.text = "New password is not the same as the confirm password.";
+        }
+        oldPassword.text = "";
+        newPassword.text = "";
+        confirmPassword.text = "";
+        LoadingPanel.SetActive(false);
+    }
+
+    public void ChangeEmailButton()
+    {
+        StartCoroutine(ChangeEmail());
+    }
+
+    public IEnumerator ChangeEmail()
+    {
+        LoadingPanel.SetActive(true);
+        yield return null;
+
+        InputField email = GameObject.Find("ChangeEmail").GetComponent<InputField>();
+        Text errorText = GameObject.Find("SettingsErrorText").GetComponent<Text>();
+
+        if (controller.GetWebServerCommunicator().UpdateUser(controller.GetUser(), email.text, "",""))
+        {
+            errorText.text = "";
+            successDialog.SetActive(true);
+        }
+        else
+        {
+            errorText.text = controller.GetWebServerCommunicator().GetLastErrorMessage();
+        }
+        email.text = "";
+        LoadingPanel.SetActive(false);
     }
 
     public void AddFriendButton()

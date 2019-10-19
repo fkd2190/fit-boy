@@ -29,17 +29,21 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
         if(!empty($old_password)&& !empty($new_password)){
             //Check if old password matches
-            if(password_verify($old_password, $result->fetch_assoc()['password'])){
+            $user = $result->fetch_assoc();
+            $old_password_hash = $user['password'];
+            $temp_password_hash = $user['temp_password'];
+            if(password_verify($old_password, $old_password_hash) || password_verify($old_password, $temp_password_hash)){
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
                 $query .= "password = '{$hashed_password}', ";
             }else{
                 $response['error'] = true;
                 $response['message'] = "Passwords do not match";
             }
+            $conn->query("UPDATE users SET temp_password = '' WHERE username = '{$username}'");
         }
         if(!empty($new_email)){
             if(filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
-                $query .= "email = '{$new_email}, '";
+                $query .= "email = '{$new_email}',";
             }else{
                 $response['error'] = true;
                 $response['message'] = "Email not in valid format";
@@ -51,7 +55,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             $conn->query($query);
             if (!$conn->error) {
                 $response['error'] = false;
-                $response['message'] = "User updated successfully.";
+                $response['message'] = "User updated successfully." . $query;
             } else {
                 $response['error'] = true;
                 $response['message'] = "Error updating user details: " . $conn->error;
