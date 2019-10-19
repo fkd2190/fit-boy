@@ -9,6 +9,7 @@ using Mapbox.Utils;
 using Mapbox.Unity.Map;
 using Mapbox.Unity.Utilities;
 using System.IO;
+using System; 
 
 public class FitBoyGUI : MonoBehaviour
 {
@@ -252,12 +253,20 @@ public class FitBoyGUI : MonoBehaviour
     {
         AbstractMap map = GameObject.Find("Map").GetComponent<AbstractMap>();
         Vector2d location = GameObject.Find("PlayerTarget").transform.GetGeoPosition(map.CenterMercator, map.WorldRelativeScale);
-        Debug.Log("Loc: " + location.x + " " + location.y);
         controller.RadiationZones = Gen_Rad_Zone.In_rad_zone(new GPSCoordinate(location.x, location.y, "")); //Generate radiation zones around player location
+        //controller.RadiationZones = new ArrayList();
+        //controller.RadiationZones.Add(new Radiation_Zone(new GPSCoordinate(60.19235, 24.96611, ""), 70));
         foreach (Radiation_Zone zone in controller.RadiationZones)
         {
             GameObject radZone = Instantiate(cube);
             radZone.transform.MoveToGeocoordinate(zone.coordinate.Lat, zone.coordinate.Lon, map.CenterMercator, map.WorldRelativeScale);
+            GameObject g = new GameObject();
+            double newLat = zone.coordinate.Lat + ((zone.radius / 1000) / 6371) * (180 / Math.PI);
+            Debug.Log(newLat);
+            g.transform.MoveToGeocoordinate(newLat, zone.coordinate.Lon, map.CenterMercator, map.WorldRelativeScale);
+            double scale = (g.GetComponent<Transform>().localPosition.z - radZone.GetComponent<Transform>().localPosition.z) / zone.radius;
+            Debug.Log("Scale: " + scale);
+            radZone.transform.localScale = new Vector3((float)(scale * zone.radius * 2), 0.1f, (float)(scale * zone.radius * 2));
         }
     }
 }

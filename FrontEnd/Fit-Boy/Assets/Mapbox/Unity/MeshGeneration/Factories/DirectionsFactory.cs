@@ -97,6 +97,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                 {
                     controller.CompleteQuest();
                 }
+                Debug.Log("Crossed: " + controller.activeQuest.crossedRadZone);
                 if(!controller.activeQuest.crossedRadZone && controller.CheckInZone(wp[0].x, wp[0].y))
                 {
                     controller.activeQuest.crossedRadZone = true;

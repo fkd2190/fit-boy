@@ -14,8 +14,8 @@ public class Gen_Rad_Zone
 		for (int i = 0; (i < 10); i++)
 		{
             //Generate 10 random radiation zones around the user's location
-			double randomLatitudeOffset = (rand.NextDouble() * 0.01) - 0.005;
-            double randomLongitudeOffset = (rand.NextDouble() * 0.01) - 0.005;
+            double randomLatitudeOffset = (rand.NextDouble() * 0.1) - 0.05;
+            double randomLongitudeOffset = (rand.NextDouble() * 0.1) - 0.05;
 
             double zoneLatitide = randomLatitudeOffset + current.Lat;
             double zoneLongitude = randomLongitudeOffset + current.Lon;

@@ -9,6 +9,7 @@ public class Controller : MonoBehaviour
     public WebServerCommunicator wsc;
     public Quest activeQuest;
     public GameObject questFinishedPanel;
+    public GameObject radiationZonePanel;
     public ArrayList RadiationZones;
 
 
@@ -84,7 +85,7 @@ public class Controller : MonoBehaviour
             dist = dist * 60 * 1.1515;
             //Convert to m
             dist = dist * 1.609344 * 1000;
-            Debug.Log(dist);
+            //Debug.Log(dist);
             return dist;
         }
     }
@@ -93,7 +94,13 @@ public class Controller : MonoBehaviour
     {
         foreach(Radiation_Zone zone in RadiationZones)
         {
-            return (CalculateDistance(lat1, lon1, zone.coordinate.Lat, zone.coordinate.Lon) <= zone.radius);
+            double dist = CalculateDistance(lat1, lon1, zone.coordinate.Lat, zone.coordinate.Lon);
+            Debug.Log("Distance to zone: " + dist);
+            if(dist <= zone.radius)
+            {
+                radiationZonePanel.SetActive(true);
+                return true;
+            }
         }
         return false;
     }
