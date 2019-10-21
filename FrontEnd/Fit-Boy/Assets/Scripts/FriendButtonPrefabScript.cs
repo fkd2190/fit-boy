@@ -10,6 +10,14 @@ public class FriendButtonPrefabScript : MonoBehaviour
 
     public void ViewFriend()
     {
+        StartCoroutine(ViewFriendAction());
+    }
+
+    public IEnumerator ViewFriendAction()
+    {
+        GameObject loadingPanel = GameObject.Find("InitClasses").GetComponent<FitBoyGUI>().LoadingPanel;
+        loadingPanel.SetActive(true);
+        yield return null;
         GameObject friendPanel = GameObject.Find("FriendProfilePanel");
         Debug.Log(friend.GetUsername());
         friend = GameObject.Find("InitClasses").GetComponent<Controller>().GetWebServerCommunicator().AuthenticateUser(friend.GetUsername(), "", true);
@@ -37,14 +45,24 @@ public class FriendButtonPrefabScript : MonoBehaviour
 
             newQuest.transform.SetParent(GameObject.Find("FriendQuests").transform, false);
         }
+        loadingPanel.SetActive(false);
         friendPanel.GetComponent<RectTransform>().localPosition = new Vector3(0, 100, 0);
     }
 
     public void UnFriend()
     {
+        StartCoroutine(UnFriendAction());
+    }
+
+    public IEnumerator UnFriendAction()
+    {
+        GameObject loadingPanel = GameObject.Find("InitClasses").GetComponent<FitBoyGUI>().LoadingPanel;
+        loadingPanel.SetActive(true);
+        yield return null;
         Controller c = GameObject.Find("InitClasses").GetComponent<Controller>();
         c.GetWebServerCommunicator().DeleteFriend(c.GetUser().GetUsername(), friend.GetUsername());
         c.GetUser().SetFriends(c.GetWebServerCommunicator().GetFriends(c.GetUser().GetUserID()));
         GameObject.Find("InitClasses").GetComponent<FitBoyGUI>().UpdateFriendGUI();
+        loadingPanel.SetActive(false);
     }
 }
