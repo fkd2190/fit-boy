@@ -1074,6 +1074,7 @@ MonoBehaviour:
   cube: {fileID: 487878092103464384, guid: 40be9f88b1c46e041b8f30a5ab4e2c0e, type: 3}
   friendButtonPrefab: {fileID: 5179732755864019398, guid: 7bc43e3bc48c78849bdd2c05c503d281,
     type: 3}
+  successDialog: {fileID: 8674047395741577355}
 --- !u!1 &119041283
 GameObject:
   m_ObjectHideFlags: 0
@@ -4661,7 +4662,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000042586387, y: 0.000011186926}
+  m_AnchoredPosition: {x: 0.000042586387, y: 0.000022279806}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &718012048
@@ -5939,7 +5940,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000042586387, y: -0.000013085936}
+  m_AnchoredPosition: {x: 0.000042586387, y: 0.000017523611}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1038543095
@@ -11705,7 +11706,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000042586387, y: -0.000010494953}
+  m_AnchoredPosition: {x: 0.000042586387, y: 0.000019191722}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1929481718
@@ -13292,11 +13293,11 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 118143651}
         m_MethodName: LogOut
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgument: {fileID: 427816833}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -13458,7 +13459,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 118143651}
         m_MethodName: ChangePasswordButton
         m_Mode: 1
         m_Arguments:
@@ -13587,8 +13588,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 864560428}
-        m_MethodName: 
+      - m_Target: {fileID: 118143651}
+        m_MethodName: ChangeEmailButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

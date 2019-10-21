@@ -342,12 +342,11 @@ public class FitBoyGUI : MonoBehaviour
     {
         DirectionsFactory df = GameObject.Find("Directions").GetComponent<DirectionsFactory>();
         df.endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
-        df.Query();
         DrawRadiationZones();
         GameObject.Find("QuestPanel").GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
         controller.SetActiveQuest(quest);
         Debug.Log(quest.Stop_co.Lat);
-        Debug.Log("Quest Started");
+        df.Query();
     }
 
     public void LogOut(GameObject LoginPanel)

@@ -1,0 +1,1 @@
+True;False;False;True;unity;DeviceLocationProvider;20180524-163505.787;20180524-163427.922;-36.853034;174.767035;34.0;305.1;305.1;[not supported by provider];[not supported by provider];[not supported by provider];[not supported by provider]
