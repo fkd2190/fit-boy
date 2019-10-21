@@ -340,12 +340,11 @@ public class FitBoyGUI : MonoBehaviour
 
     public void StartQuest(Quest quest)
     {
+        DrawRadiationZones();
+        controller.SetActiveQuest(quest);
         DirectionsFactory df = GameObject.Find("Directions").GetComponent<DirectionsFactory>();
         df.endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
-        DrawRadiationZones();
         GameObject.Find("QuestPanel").GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
-        controller.SetActiveQuest(quest);
-        Debug.Log(quest.Stop_co.Lat);
         df.Query();
     }
 
@@ -356,6 +355,12 @@ public class FitBoyGUI : MonoBehaviour
         controller.GetWebServerCommunicator().UpdateUser(controller.GetUser());
         controller.SetUser(null);
         controller.SetActiveQuest(null);
+        controller.RadiationZones = null;
+        GameObject.Find("Directions").GetComponent<DirectionsFactory>().Query();
+        foreach (Transform child in GameObject.Find("RadiationZones").transform)
+        {
+            Destroy(child.gameObject);
+        }
         string filePath = Application.persistentDataPath + "/settings.dat";
         if (File.Exists(filePath))
         {
@@ -367,6 +372,11 @@ public class FitBoyGUI : MonoBehaviour
 
     private void DrawRadiationZones()
     {
+        foreach (Transform child in GameObject.Find("RadiationZones").transform)
+        {
+            Destroy(child.gameObject);
+        }
+
         AbstractMap map = GameObject.Find("Map").GetComponent<AbstractMap>();
         Vector2d location = GameObject.Find("PlayerTarget").transform.GetGeoPosition(map.CenterMercator, map.WorldRelativeScale);
         controller.RadiationZones = Gen_Rad_Zone.In_rad_zone(new GPSCoordinate(location.x, location.y, "")); //Generate radiation zones around player location
@@ -383,6 +393,8 @@ public class FitBoyGUI : MonoBehaviour
             double scale = (g.GetComponent<Transform>().localPosition.z - radZone.GetComponent<Transform>().localPosition.z) / zone.radius;
             Debug.Log("Scale: " + scale);
             radZone.transform.localScale = new Vector3((float)(scale * zone.radius * 2), 0.1f, (float)(scale * zone.radius * 2));
+            Destroy(g);
+            radZone.transform.SetParent(GameObject.Find("RadiationZones").transform, false);
         }
     }
 

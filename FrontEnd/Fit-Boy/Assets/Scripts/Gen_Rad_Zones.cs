@@ -2,16 +2,14 @@
 using System.Collections;
 using UnityEngine;
 
-public class Gen_Rad_Zone
+public static class Gen_Rad_Zone
 {
-
 	static System.Random rand = new System.Random();
 
-	static ArrayList rads = new ArrayList();
-
-	public static ArrayList In_rad_zone(GPSCoordinate current)
+	static public ArrayList In_rad_zone(GPSCoordinate current)
 	{
-		for (int i = 0; (i < 10); i++)
+        ArrayList rads = new ArrayList();
+        for (int i = 0; (i < 10); i++)
 		{
             //Generate 10 random radiation zones around the user's location
             double randomLatitudeOffset = (rand.NextDouble() * 0.1) - 0.05;
