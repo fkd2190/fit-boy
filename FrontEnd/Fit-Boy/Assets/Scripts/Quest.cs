@@ -6,6 +6,7 @@ public class Quest
     public GPSCoordinate Stop_co { get; set; }
     public GPSCoordinate Start_co { get; set; }
     public int Level;
+    public bool crossedRadZone;
 
 	public Quest(Quest_info info, int xp_reward, int level, GPSCoordinate Start_co, GPSCoordinate stop_co)
 	{
@@ -14,5 +15,6 @@ public class Quest
 		this.Level = level;
         this.Start_co = Start_co;
 		this.Stop_co = stop_co;
+        crossedRadZone = false;
 	}
 }

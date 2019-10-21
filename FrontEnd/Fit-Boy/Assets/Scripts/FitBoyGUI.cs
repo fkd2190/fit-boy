@@ -6,13 +6,19 @@ using UnityEngine.UI;
 using System.Text;
 using Mapbox.Unity.MeshGeneration.Factories;
 using Mapbox.Utils;
+using Mapbox.Unity.Map;
+using Mapbox.Unity.Utilities;
 using System.IO;
+using System; 
 
 public class FitBoyGUI : MonoBehaviour
 {
     public Controller controller;
     public GameObject LoadingPanel;
     public GameObject questButtonPrefab;
+    public GameObject cube;
+    public GameObject friendButtonPrefab;
+    public GameObject successDialog;
 
     public void Start()
     {
@@ -30,8 +36,121 @@ public class FitBoyGUI : MonoBehaviour
                 user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
                 UpdateProfileGUI(user);
                 FillQuestGUI();
+                UpdateFriendGUI();
                 GameObject.Find("LoginPanel").SetActive(false);
             }
+        }
+    }
+
+    public void ChangePasswordButton()
+    {
+        StartCoroutine(ChangePassword());
+    }
+
+    public IEnumerator ChangePassword()
+    {
+        LoadingPanel.SetActive(true);
+        yield return null;
+
+        InputField oldPassword = GameObject.Find("OldPassword").GetComponent<InputField>();
+        InputField newPassword = GameObject.Find("ChangePassword").GetComponent<InputField>();
+        InputField confirmPassword = GameObject.Find("ConfirmChangePassword").GetComponent<InputField>();
+        Text errorText = GameObject.Find("SettingsErrorText").GetComponent<Text>();
+
+        if (newPassword.text.Equals(confirmPassword.text))
+        {
+            if(controller.GetWebServerCommunicator().UpdateUser(controller.GetUser(), "", oldPassword.text, newPassword.text))
+            {
+                successDialog.SetActive(true);
+                errorText.text = "";
+            }
+            else
+            {
+                errorText.text = controller.GetWebServerCommunicator().GetLastErrorMessage();
+            }
+        }
+        else
+        {
+            errorText.text = "New password is not the same as the confirm password.";
+        }
+        oldPassword.text = "";
+        newPassword.text = "";
+        confirmPassword.text = "";
+        LoadingPanel.SetActive(false);
+    }
+
+    public void ChangeEmailButton()
+    {
+        StartCoroutine(ChangeEmail());
+    }
+
+    public IEnumerator ChangeEmail()
+    {
+        LoadingPanel.SetActive(true);
+        yield return null;
+
+        InputField email = GameObject.Find("ChangeEmail").GetComponent<InputField>();
+        Text errorText = GameObject.Find("SettingsErrorText").GetComponent<Text>();
+
+        if (controller.GetWebServerCommunicator().UpdateUser(controller.GetUser(), email.text, "",""))
+        {
+            errorText.text = "";
+            successDialog.SetActive(true);
+        }
+        else
+        {
+            errorText.text = controller.GetWebServerCommunicator().GetLastErrorMessage();
+        }
+        email.text = "";
+        LoadingPanel.SetActive(false);
+    }
+
+    public void AddFriendButton()
+    {
+        StartCoroutine(AddFriend());
+    }
+
+    public IEnumerator AddFriend()
+    {
+        LoadingPanel.SetActive(true);
+        yield return null;
+
+        InputField friendUsername = GameObject.Find("AddFriendUsername").GetComponent<InputField>();
+        Text errorText = GameObject.Find("AddFriendErrorText").GetComponent<Text>();
+
+        if (controller.GetWebServerCommunicator().AddFriend(controller.GetUser().GetUsername(), friendUsername.text))
+        {
+            friendUsername.text = "";
+            errorText.text = "";
+            User u = controller.GetUser();
+            u.SetFriends(controller.GetWebServerCommunicator().GetFriends(u.GetUserID()));
+            UpdateFriendGUI();
+        }
+        else
+        {
+            errorText.text = controller.GetWebServerCommunicator().GetLastErrorMessage();
+        }
+        LoadingPanel.SetActive(false);
+    }
+
+    public void UpdateFriendGUI()
+    {
+        foreach (Transform child in GameObject.Find("FriendsList").transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (User friend in controller.GetUser().GetFriends())
+        {
+            GameObject newFriend = Instantiate(friendButtonPrefab);
+            newFriend.GetComponent<FriendButtonPrefabScript>().friend = friend;
+            newFriend.transform.Find("FriendUsername").GetComponent<Text>().text = friend.GetUsername();
+            newFriend.transform.Find("FriendXpValue").GetComponent<Text>().text = "" + friend.GetXp();
+            newFriend.transform.Find("FriendLevelValue").GetComponent<Text>().text = "" + friend.GetLevel();
+            //Add details
+
+
+            newFriend.transform.SetParent(GameObject.Find("FriendsList").transform, false);
         }
     }
 
@@ -84,7 +203,7 @@ public class FitBoyGUI : MonoBehaviour
             user.SetFriends(controller.GetWebServerCommunicator().GetFriends(user.GetUserID()));
             UpdateProfileGUI(user);
             FillQuestGUI();
-
+            UpdateFriendGUI();
             if (rememberToggle.isOn)
             {
                 string filePath = Application.persistentDataPath + "/settings.dat";
@@ -167,7 +286,8 @@ public class FitBoyGUI : MonoBehaviour
             newQuest.GetComponent<Button>().interactable = false;
             newQuest.transform.Find("QuestTitle").GetComponent<Text>().text = quest.info.Title;
             newQuest.transform.Find("Description").GetComponent<Text>().text = quest.info.Desc;
-            newQuest.transform.Find("Description").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + " Level: " + quest.Level;
+            newQuest.transform.Find("QuestLocation").GetComponent<Text>().text = quest.Stop_co.Name;
+            newQuest.transform.Find("QuestDetails").GetComponent<Text>().text = "Xp: " + quest.Xp_reward + " Level: " + quest.Level;
             //Add details
             
 
@@ -220,7 +340,10 @@ public class FitBoyGUI : MonoBehaviour
 
     public void StartQuest(Quest quest)
     {
-        GameObject.Find("Directions").GetComponent<DirectionsFactory>().endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
+        DirectionsFactory df = GameObject.Find("Directions").GetComponent<DirectionsFactory>();
+        df.endPos = new Vector2d(quest.Stop_co.Lat, quest.Stop_co.Lon);
+        df.Query();
+        DrawRadiationZones();
         GameObject.Find("QuestPanel").GetComponent<RectTransform>().localPosition = new Vector3(-800, 100, 0);
         controller.SetActiveQuest(quest);
         Debug.Log(quest.Stop_co.Lat);
@@ -241,5 +364,32 @@ public class FitBoyGUI : MonoBehaviour
             fileContents[0] = "";
             File.WriteAllLines(filePath, fileContents);
         }
+    }
+
+    private void DrawRadiationZones()
+    {
+        AbstractMap map = GameObject.Find("Map").GetComponent<AbstractMap>();
+        Vector2d location = GameObject.Find("PlayerTarget").transform.GetGeoPosition(map.CenterMercator, map.WorldRelativeScale);
+        controller.RadiationZones = Gen_Rad_Zone.In_rad_zone(new GPSCoordinate(location.x, location.y, "")); //Generate radiation zones around player location
+        //controller.RadiationZones = new ArrayList();
+        //controller.RadiationZones.Add(new Radiation_Zone(new GPSCoordinate(60.19235, 24.96611, ""), 70));
+        foreach (Radiation_Zone zone in controller.RadiationZones)
+        {
+            GameObject radZone = Instantiate(cube);
+            radZone.transform.MoveToGeocoordinate(zone.coordinate.Lat, zone.coordinate.Lon, map.CenterMercator, map.WorldRelativeScale);
+            GameObject g = new GameObject();
+            double newLat = zone.coordinate.Lat + ((zone.radius / 1000) / 6371) * (180 / Math.PI);
+            Debug.Log(newLat);
+            g.transform.MoveToGeocoordinate(newLat, zone.coordinate.Lon, map.CenterMercator, map.WorldRelativeScale);
+            double scale = (g.GetComponent<Transform>().localPosition.z - radZone.GetComponent<Transform>().localPosition.z) / zone.radius;
+            Debug.Log("Scale: " + scale);
+            radZone.transform.localScale = new Vector3((float)(scale * zone.radius * 2), 0.1f, (float)(scale * zone.radius * 2));
+        }
+    }
+
+    public void CloseFriendProfilePanel()
+    {
+        Transform t = GameObject.Find("FriendProfilePanel").GetComponent<Transform>();
+        t.localPosition = new Vector3(-800, 100, 0);
     }
 }

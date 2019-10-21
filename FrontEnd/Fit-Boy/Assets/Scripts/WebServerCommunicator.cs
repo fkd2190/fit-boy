@@ -92,7 +92,7 @@ public class WebServerCommunicator
     {
         var data = new System.Collections.Specialized.NameValueCollection();
         data.Add("username", user.GetUsername());
-        data.Add("new_email", user.GetEmail());
+        data.Add("new_email", newEmail);
         data.Add("xp", "" + user.GetXp());
         data.Add("level", "" + user.GetLevel());
         data.Add("old_password", oldPassword);
